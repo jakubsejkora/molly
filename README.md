@@ -12,7 +12,7 @@
 <p align="center">
   <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-1d1d1f?style=flat-square&logo=apple&logoColor=white">
   <img alt="Apple Silicon" src="https://img.shields.io/badge/Apple%20Silicon-arm64-6D5DFE?style=flat-square">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.4.1-35F4A8?style=flat-square">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.4.2-35F4A8?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-FF4FA3?style=flat-square">
 </p>
 
@@ -72,17 +72,9 @@
 
 ## Quick start
 
-1. Download `Molly-0.4.1-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
+1. Download `Molly-0.4.2-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
 2. Open the DMG and drag **Molly** into `/Applications`.
-3. **First launch:** right-click `Molly.app` → **Open** → **Open** again. (See below.)
-
-## First run on macOS
-
-> **Heads up — this 0.4 build is not Developer ID signed.** macOS Gatekeeper will refuse to open it on the first attempt. This is a known and temporary trade-off for the preview release.
-
-- Right-click `Molly.app` in `/Applications` → **Open** → **Open** in the dialog that appears.
-- After that first launch, Molly opens normally from Spotlight, Launchpad, or `open -a Molly`.
-- Signed and notarized builds will arrive in a later release.
+3. Launch from Spotlight, Launchpad, or double-click in `/Applications`. macOS opens it without warnings — Molly is signed by Apple's Developer ID and notarized.
 
 ## How it works
 
@@ -107,7 +99,7 @@ To package a `.dmg` from a local build:
 
 ```bash
 ./Scripts/package-dmg-arm64.sh
-# → dist/Molly-0.4.1-arm64.dmg
+# → dist/Molly-0.4.2-arm64.dmg
 ```
 
 For Developer ID signing + notarization see [`docs/RELEASE.md`](docs/RELEASE.md).

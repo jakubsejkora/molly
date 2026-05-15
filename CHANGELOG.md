@@ -8,6 +8,27 @@ is pre-1.0, minor releases may contain breaking changes; patch releases will not
 
 ## [Unreleased]
 
+## [0.4.2] — 2026-05-15
+
+### Added
+- **Developer ID signing + Apple notarization.** The DMG is now signed with
+  `Developer ID Application: JAKUB SEJKORA (T6C4HUSL99)` and Apple has issued
+  a notarization ticket stapled into the bundle. macOS Sequoia (15+) and
+  earlier open it without any Gatekeeper warning — no right-click → Open or
+  System Settings detour required.
+
+### Fixed
+- README `<picture>` block was serving the wrong logo per theme — dark-mode
+  viewers got dark text on a dark background, light-mode viewers got white
+  text on a white background. The brand kit's `_light` suffix means "light
+  text" (for dark backgrounds) and `_dark` means "dark text" (for light
+  backgrounds), the opposite of the `prefers-color-scheme` mapping I had.
+
+### Removed
+- "Right-click → Open → Open" first-run instructions from README — no longer
+  needed now that the DMG is notarized. macOS Sequoia hardened that workflow
+  anyway; the bypass dialog now only offers "Move to Trash" / "Done".
+
 ## [0.4.1] — 2026-05-15
 
 ### Added
@@ -68,6 +89,7 @@ First public preview.
   on a maintainer Mac per `docs/RELEASE.md`.
 - No log-export ZIP (plaintext JSONL via save panel only).
 
-[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.2
 [0.4.1]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.0

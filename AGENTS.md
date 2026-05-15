@@ -4,7 +4,7 @@ Guidance for AI coding agents working on this repository.
 
 ## What this project is
 
-Molly is a native macOS menu bar + dashboard app (Swift / SwiftUI / AppKit) that keeps a Mac awake for long agent or CI jobs, with an optional jittered network-probe lane to trim idle hotspot disconnects. macOS 14 Sonoma+, Apple Silicon. Currently at **v0.4.1** (pre-1.0 preview).
+Molly is a native macOS menu bar + dashboard app (Swift / SwiftUI / AppKit) that keeps a Mac awake for long agent or CI jobs, with an optional jittered network-probe lane to trim idle hotspot disconnects. macOS 14 Sonoma+, Apple Silicon. Currently at **v0.4.2** (pre-1.0 preview).
 
 ## Layout
 
