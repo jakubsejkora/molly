@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/molly_logo_lockup_dark.png">
-    <img alt="molly" src="docs/molly_logo_lockup_light.png" width="420">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/molly_logo_lockup_light.png">
+    <img alt="molly" src="docs/molly_logo_lockup_dark.png" width="420">
   </picture>
 </p>
 
