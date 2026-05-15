@@ -12,9 +12,15 @@ on:
 
 jobs:
   build-arm64-release:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+
+      - name: Select latest Xcode (project format requires Xcode 16+)
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app /Applications/Xcode.app 2>/dev/null | head -n1)"
+          xcodebuild -version
 
       - name: Install XcodeGen
         run: brew install xcodegen
