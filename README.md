@@ -12,7 +12,7 @@
 <p align="center">
   <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-1d1d1f?style=flat-square&logo=apple&logoColor=white">
   <img alt="Apple Silicon" src="https://img.shields.io/badge/Apple%20Silicon-arm64-6D5DFE?style=flat-square">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.4.0-35F4A8?style=flat-square">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.4.1-35F4A8?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-FF4FA3?style=flat-square">
 </p>
 
@@ -51,12 +51,28 @@
   </tbody>
 </table>
 
-<!-- Drop a screenshot at docs/screenshot.png to render here -->
-![screenshot](docs/screenshot.png)
+## See it
+
+<p align="center">
+  <img alt="Molly dashboard – Overview" src="docs/screenshots/dashboard-overview.png" width="720">
+</p>
+
+<table>
+  <tr>
+    <td align="center" width="50%" valign="top">
+      <img alt="Molly menu bar dropdown" src="docs/screenshots/menu-bar.png"><br>
+      <sub><b>Menu bar.</b> Toggle lanes, pick a timer preset, hop to the dashboard.</sub>
+    </td>
+    <td align="center" width="50%" valign="top">
+      <img alt="Molly session timer presets" src="docs/screenshots/dashboard-session-timer.png"><br>
+      <sub><b>Session timer.</b> 30 m / 2 h / 4 h / manual, with an optional mirror toggle.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Quick start
 
-1. Download `Molly-0.4.0-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
+1. Download `Molly-0.4.1-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
 2. Open the DMG and drag **Molly** into `/Applications`.
 3. **First launch:** right-click `Molly.app` → **Open** → **Open** again. (See below.)
 
@@ -91,7 +107,7 @@ To package a `.dmg` from a local build:
 
 ```bash
 ./Scripts/package-dmg-arm64.sh
-# → dist/Molly-0.4.0-arm64.dmg
+# → dist/Molly-0.4.1-arm64.dmg
 ```
 
 For Developer ID signing + notarization see [`docs/RELEASE.md`](docs/RELEASE.md).

@@ -13,6 +13,9 @@ xcuserdata/
 # Build outputs (release artifacts live on GitHub Releases, not in the repo)
 dist/
 
+# Raw screenshot scratch folder — canonical copies live in docs/screenshots/
+/screenshots/
+
 # Swift
 .build/
 Packages/

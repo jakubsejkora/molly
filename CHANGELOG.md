@@ -8,10 +8,23 @@ is pre-1.0, minor releases may contain breaking changes; patch releases will not
 
 ## [Unreleased]
 
+## [0.4.1] — 2026-05-15
+
+### Added
+- README screenshots gallery: dashboard Overview hero, menu-bar dropdown,
+  session-timer preset picker (under `docs/screenshots/`).
+
 ### Changed
 - CI: bumped the verify-macos-build runner to `macos-15` with explicit Xcode 16+
   selection, since XcodeGen 2.44 emits an Xcode-16-only project format
   (`objectVersion = 77`) that the previous `macos-14` runner (Xcode 15.4) could not read.
+- `MARKETING_VERSION` bumped to `0.4.1` so the binary version stamp matches the tag.
+
+### Notes
+- The menu-bar screenshot was captured from a pre-0.4.0 local build and still
+  shows the legacy "Sparkle-eligible" SKU footer. The 0.4.0+ binary now displays
+  "Developer ID (direct download)" — screenshot to be refreshed in a later release.
+- No functional code changes vs 0.4.0; the DMG is a re-stamp.
 
 ## [0.4.0] — 2026-05-15
 
@@ -55,5 +68,6 @@ First public preview.
   on a maintainer Mac per `docs/RELEASE.md`.
 - No log-export ZIP (plaintext JSONL via save panel only).
 
-[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.0
