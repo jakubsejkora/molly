@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Xcode
+DerivedData/
+build/
+*.xcodeproj/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Build outputs (release artifacts live on GitHub Releases, not in the repo)
+dist/
+
+# Swift
+.build/
+Packages/
+Package.resolved
+
+# Logs (Molly's own JSONL store, just in case)
+*.log
+*.jsonl

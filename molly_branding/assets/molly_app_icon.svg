@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Molly app icon">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF4FA3"/><stop offset=".55" stop-color="#6D5DFE"/><stop offset="1" stop-color="#35F4A8"/></linearGradient>
+  <linearGradient id="pill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF8FB"/><stop offset=".48" stop-color="#FFB9CC"/><stop offset="1" stop-color="#FF4FA3"/></linearGradient>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="36" stdDeviation="38" flood-color="#080816" flood-opacity=".35"/></filter>
+</defs>
+<rect width="1024" height="1024" rx="198" fill="url(#bg)"/>
+<circle cx="512" cy="520" r="300" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="8"/>
+<g transform="translate(162 382) rotate(-17 350 130)" filter="url(#soft)">
+  <rect x="0" y="0" width="690" height="260" rx="130" fill="url(#pill)"/>
+  <rect x="348" y="22" width="11" height="216" rx="6" fill="#5B2B83" opacity=".32"/>
+  <text x="145" y="188" font-family="Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="178" font-weight="900" fill="#532985" opacity=".88">m</text>
+  <rect x="18" y="18" width="654" height="224" rx="112" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="8"/>
+</g>
+<path d="M730 196l17 37 37 17-37 17-17 37-17-37-37-17 37-17z" fill="#35F4A8"/><circle cx="814" cy="344" r="26" fill="#35F4A8" opacity=".9"/>
+</svg>
