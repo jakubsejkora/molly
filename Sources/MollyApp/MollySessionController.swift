@@ -37,6 +37,8 @@ final class MollySessionController: ObservableObject {
 
     let probes: ConnectivityLaneEngine
 
+    let agentMonitor: AgentMonitorEngine
+
     weak var menuBridge: MenuCoordinator?
 
     private let defaults = UserDefaults.standard
@@ -47,6 +49,7 @@ final class MollySessionController: ObservableObject {
 
     init() {
         probes = ConnectivityLaneEngine(logging: logs)
+        agentMonitor = AgentMonitorEngine(logging: logs)
 
         mirrorTimers =
             defaults.object(forKey: MollyPreferenceKeys.mirrorTimer) as? Bool ?? true
@@ -66,6 +69,7 @@ final class MollySessionController: ObservableObject {
         }
 
         bindProbePublishing()
+        bindAgentMonitorPublishing()
 
         watchLowPowerMode()
 
@@ -77,6 +81,7 @@ final class MollySessionController: ObservableObject {
 
     func beginStartupHousekeeping() {
         probes.bootstrapInfrastructureIfNeeded()
+        agentMonitor.startMonitoring()
     }
 
     func shutdownBeforeTermination() {
@@ -86,6 +91,7 @@ final class MollySessionController: ObservableObject {
         power.release()
 
         probes.shutdownHard()
+        agentMonitor.stopMonitoring()
 
     }
 
@@ -545,6 +551,25 @@ final class MollySessionController: ObservableObject {
     }
 
 
+
+    var agentSummaryLine: String {
+        agentMonitor.snapshot.summaryLine
+    }
+
+    private func bindAgentMonitorPublishing() {
+        agentMonitor.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+                self?.menuBridge?.rebuild()
+            }
+            .store(in: &bag)
+
+        agentMonitor.bookmarks.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &bag)
+    }
 
     private func bindProbePublishing() {
 

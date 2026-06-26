@@ -80,6 +80,10 @@ final class MenuCoordinator: NSObject {
 
         composite.append(session.countdownSubtitle)
 
+        composite.append("\nAgents • ")
+
+        composite.append(session.agentSummaryLine)
+
         let shell = NSMenuItem(title: String(composite), action: nil, keyEquivalent: "")
 
         shell.isEnabled = false
