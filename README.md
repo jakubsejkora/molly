@@ -12,7 +12,7 @@
 <p align="center">
   <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-1d1d1f?style=flat-square&logo=apple&logoColor=white">
   <img alt="Apple Silicon" src="https://img.shields.io/badge/Apple%20Silicon-arm64-6D5DFE?style=flat-square">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.4.2-35F4A8?style=flat-square">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.5.0-35F4A8?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-FF4FA3?style=flat-square">
 </p>
 
@@ -72,9 +72,9 @@
 
 ## Quick start
 
-1. Download `Molly-0.4.2-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
+1. Download `Molly-0.5.0-arm64.dmg` from [Releases](https://github.com/jakubsejkora/molly/releases/latest).
 2. Open the DMG and drag **Molly** into `/Applications`.
-3. Launch from Spotlight, Launchpad, or double-click in `/Applications`. macOS opens it without warnings — Molly is signed by Apple's Developer ID and notarized.
+3. Launch from Spotlight, Launchpad, or double-click in `/Applications`. CI-built releases use ad-hoc signing — macOS may ask you to confirm on first open (right-click → Open). Maintainer notarized builds open without warnings.
 
 ## How it works
 
@@ -99,7 +99,7 @@ To package a `.dmg` from a local build:
 
 ```bash
 ./Scripts/package-dmg-arm64.sh
-# → dist/Molly-0.4.2-arm64.dmg
+# → dist/Molly-0.5.0-arm64.dmg
 ```
 
 For Developer ID signing + notarization see [`docs/RELEASE.md`](docs/RELEASE.md).

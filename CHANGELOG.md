@@ -8,6 +8,21 @@ is pre-1.0, minor releases may contain breaking changes; patch releases will not
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-06-26
+
+### Added
+- **Agent Activity Monitor** — new **Agents** dashboard pane and menu-bar summary that
+  track running AI coding sessions on this Mac (Claude Code, Cursor, Codex).
+- Process-level detection works out of the box; optional security-scoped folder access
+  unlocks session names, project folders, status badges, and Claude Code sub-agents.
+- Session start/end/status transitions are logged to the local JSONL store.
+- GitHub Actions **Release (Apple Silicon)** workflow builds and publishes
+  `Molly-<version>-arm64.dmg` on version tags.
+
+### Changed
+- `MARKETING_VERSION` bumped to `0.5.0`.
+- Frozen spec updated: Agents monitor is now an in-scope pillar.
+
 ## [0.4.2] — 2026-05-15
 
 ### Added
@@ -89,7 +104,8 @@ First public preview.
   on a maintainer Mac per `docs/RELEASE.md`.
 - No log-export ZIP (plaintext JSONL via save panel only).
 
-[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/jakubsejkora/molly/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/jakubsejkora/molly/releases/tag/v0.5.0
 [0.4.2]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.2
 [0.4.1]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jakubsejkora/molly/releases/tag/v0.4.0
