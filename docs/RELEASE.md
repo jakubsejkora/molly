@@ -15,7 +15,15 @@ xcodegen generate
 
 ## Developer ID signed + notarized build
 
-Use this flow once you have a Developer ID Application certificate installed in your keychain and a notarization profile.
+**One command (recommended on your Mac):**
+
+```bash
+./Scripts/release-all-arm64.sh
+```
+
+This installs XcodeGen if needed, archives, exports with Developer ID, notarizes (profile `AC_NOTARY` by default), staples, and writes `dist/Molly-<version>-arm64.dmg`.
+
+Or run the steps manually:
 
 ```bash
 chmod +x Scripts/build-direct-arm64.sh   # once
