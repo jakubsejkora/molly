@@ -34,6 +34,7 @@ Questionnaire-plus-planner backlog translated for engineering. Closed-lid / agen
 |---|---|---|
 | **Awake** | Block idle-class sleep disruptions for agent workloads while **display may sleep**. | Driven by IOPowerAssertions / `ProcessInfo.performExpiringActivity`/activity tokens finalized during coding spike. Never implicitly toggled by lid open/close. |
 | **Connectivity** | When armed, jittered probes keep network stack exercised to reduce idle hotspot disconnect symptom. | Start/stop tied to lane toggle + aggregated timer linkage (see timers). Respect `NWPath` unsatisfied states; backoff on repeated failures. |
+| **Agents** | Surface running AI coding tool sessions (Claude Code, Cursor, Codex) for at-a-glance tracking. | Process detection always available; richer session/sub-agent detail requires opt-in security-scoped folder access (`~/.claude`, `~/.cursor/projects`, `~/.codex`). Best-effort parsing — no outbound telemetry. Poll interval **5 s**. |
 
 **Timers:** Provide countdown auto-off presets (**30 m / 2 h / 4 h / custom**) for Awake lane. Optional **mirror timer** checkbox (default **on** whenever Connectivity enabled simultaneously) aligns shutdown of both lanes to reduce surprise background probes.
 
@@ -61,7 +62,7 @@ Low Power interplay: Insights injects unobtrusive badge referencing `ProcessInfo
 
 | Cluster | Entries |
 |---|---|
-| Presence | Lightweight status line summarizing awake/connectivity booleans plus remaining timer. |
+| Presence | Lightweight status line summarizing awake/connectivity booleans, agent session counts, plus remaining timer. |
 | Controls | Toggle Awake, Toggle Connectivity, Timer submenu (reuse preset list). |
 | Navigation | Show Dashboard window… (**⌘0** tentative). |
 | Help | Offline privacy blurb linking to Logs export FAQ. |
@@ -71,6 +72,7 @@ Low Power interplay: Insights injects unobtrusive badge referencing `ProcessInfo
 
 | Section | Mandatory UI |
 |---|---|
+| Agents | Per-tool session cards (Claude Code / Cursor / Codex), status badges (`busy`, `idle`, `waiting`, `background`), sub-agent rows when resolvable, opt-in folder access setup. |
 | Session | Awake lane controls + timer UX + succinct limitations copy anchored to questionnaire row 12/35. |
 | Connectivity | Connectivity controls, rolling counters (success streak, fail streak), next probe ETA, LPM contextual chip. |
 | Insights | Consolidated KPI + qualitative route summary referencing VPN/routing parity decision Q25. |
@@ -87,7 +89,7 @@ Low Power interplay: Insights injects unobtrusive badge referencing `ProcessInfo
 
 ### Explicit v1 non-goals
 
-Cross-editor “agents finished detection,” calendars, differentiated battery confirmations, kiosk display pinning, undocumented CLI dependency.
+Agent-finished push notifications, calendars, differentiated battery confirmations, kiosk display pinning, undocumented CLI dependency as a hard requirement.
 
 ### MVP acceptance shorthand
 

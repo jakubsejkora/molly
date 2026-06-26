@@ -42,7 +42,9 @@ MOLLY_APP=dist/export/Molly.app ./Scripts/package-dmg-arm64.sh
 
 ## CI
 
-`.github/workflows/verify-macos-build.yml` smoke-builds Release `arm64` with ad-hoc signing on `macos-14` and uploads `Molly.app` as an artifact. Treat the CI artifact as a sanity check only, **not** as a substitute for Developer ID signing + notarization.
+`.github/workflows/verify-macos-build.yml` smoke-builds Release `arm64` with ad-hoc signing on `macos-15` and uploads `Molly.app` as an artifact. Treat the CI artifact as a sanity check only, **not** as a substitute for Developer ID signing + notarization.
+
+`.github/workflows/release-arm64.yml` builds `dist/Molly-<version>-arm64.dmg` and attaches it to a GitHub Release when you push a `v*` tag (or run the workflow manually against an existing tag). CI releases are ad-hoc signed; run the Developer ID flow below before calling a build “wide distribution ready.”
 
 ## Mac App Store (future)
 

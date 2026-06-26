@@ -9,6 +9,9 @@ enum MollyPreferenceKeys {
     static let launchAtLogin = "molly.preference.loginitem"
     /// `MollyAppearance` raw value (`system`, `light`, `dark`).
     static let appearance = "molly.preference.appearance"
+    static let agentBookmarkClaude = "molly.preference.agentBookmark.claude"
+    static let agentBookmarkCursor = "molly.preference.agentBookmark.cursor"
+    static let agentBookmarkCodex = "molly.preference.agentBookmark.codex"
 }
 
 enum MollyAppearance: String, CaseIterable, Identifiable {

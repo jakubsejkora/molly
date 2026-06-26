@@ -68,6 +68,10 @@ struct MainDashboard: View {
 
                         OverviewPane(surface: surface)
 
+                    case .agents:
+
+                        AgentsPane(surface: surface)
+
                     case .log:
 
                         LogsPane(journal: surface.logs)
@@ -142,6 +146,8 @@ private enum MainSidebarSelection: String, CaseIterable, Identifiable, Hashable 
 
     case overview
 
+    case agents
+
     case log
 
     case settings
@@ -153,6 +159,8 @@ private enum MainSidebarSelection: String, CaseIterable, Identifiable, Hashable 
         switch self {
 
         case .overview: return "Overview"
+
+        case .agents: return "Agents"
 
         case .log: return "Log"
 
@@ -167,6 +175,8 @@ private enum MainSidebarSelection: String, CaseIterable, Identifiable, Hashable 
         switch self {
 
         case .overview: return "rectangle.split.2x1"
+
+        case .agents: return "cpu"
 
         case .log: return "doc.text"
 
@@ -754,6 +764,8 @@ private struct InsightPane: View {
 
                 chip(title: "Timers", detail: surface.countdownSubtitle)
 
+                chip(title: "Agents", detail: surface.agentMonitor.snapshot.headlineSummary)
+
             }
 
         }
@@ -802,6 +814,246 @@ private struct InsightPane: View {
 
     }
 
+}
+
+// MARK: - Agents
+
+private struct AgentsPane: View {
+
+    @ObservedObject var surface: MollySessionController
+
+    @ObservedObject private var monitor: AgentMonitorEngine
+
+    @Environment(\.colorScheme) private var scheme
+
+    init(surface: MollySessionController) {
+        self.surface = surface
+        _monitor = ObservedObject(wrappedValue: surface.agentMonitor)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                PageHeader(
+                    title: "Agents",
+                    subtitle: "Track AI coding sessions running on this Mac — Claude Code, Cursor, and Codex."
+                )
+
+                summaryCard
+
+                if monitor.snapshot.sessions.isEmpty {
+                    emptyStateCard
+                } else {
+                    ForEach(AgentToolKind.allCases) { tool in
+                        toolSection(for: tool)
+                    }
+                }
+
+                AgentAccessSetupCard(monitor: monitor)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private var summaryCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("SNAPSHOT")
+                .font(.mollyCardEyebrow())
+                .foregroundStyle(.tertiary)
+                .tracking(0.6)
+
+            Text(monitor.snapshot.headlineSummary)
+                .font(.title3.weight(.semibold))
+
+            Text("Last scan \(RelativeDateTimeFormatter().localizedString(for: monitor.snapshot.lastScanAt, relativeTo: Date()))")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                ForEach(AgentToolKind.allCases) { tool in
+                    let summary = monitor.snapshot.tools[tool] ?? AgentToolSummary()
+                    WisprMetricTile(
+                        title: tool.shortLabel,
+                        value: summary.sessionCount > 0 ? "\(summary.sessionCount)" : (summary.processCount > 0 ? "\(summary.processCount) proc" : "—"),
+                        monospacedDigits: true
+                    )
+                }
+            }
+        }
+        .mollyCard()
+    }
+
+    private var emptyStateCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Nothing active right now")
+                .font(.headline)
+            Text("When Claude Code, Cursor, or Codex is running, Molly lists sessions here. Grant folder access below for names, projects, and sub-agents.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+        .mollyCard()
+    }
+
+    @ViewBuilder
+    private func toolSection(for tool: AgentToolKind) -> some View {
+        let sessions = monitor.snapshot.sessions.filter { $0.tool == tool }
+        if !sessions.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(tool.displayName.uppercased())
+                    .font(.mollyCardEyebrow())
+                    .foregroundStyle(.tertiary)
+                    .tracking(0.6)
+
+                ForEach(sessions) { session in
+                    AgentSessionCard(session: session, scheme: scheme)
+                }
+            }
+        }
+    }
+}
+
+private struct AgentSessionCard: View {
+
+    let session: AgentSessionSnapshot
+    let scheme: ColorScheme
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    if session.role == .subagent {
+                        Text("↳")
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(session.displayName)
+                        .font(.headline)
+                    AgentStatusBadge(status: session.status)
+                    if session.role == .background {
+                        Text("background")
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(MollyTheme.ColorToken.accentSoft.resolve(for: scheme))
+                            .clipShape(Capsule())
+                    }
+                }
+
+                if let cwd = session.cwd ?? session.detailLine {
+                    Text(cwd)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+
+                HStack(spacing: 12) {
+                    if let elapsed = session.elapsedDescription {
+                        Label(elapsed, systemImage: "clock")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    if let pid = session.pid {
+                        Text("pid \(pid)")
+                            .font(.caption.monospaced())
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(session.role == .subagent ? EdgeInsets(top: 12, leading: 28, bottom: 12, trailing: 16) : EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(MollyTheme.ColorToken.card.resolve(for: scheme))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(MollyTheme.ColorToken.border.resolve(for: scheme), lineWidth: 1)
+        )
+    }
+}
+
+private struct AgentStatusBadge: View {
+
+    let status: AgentRunStatus
+
+    var body: some View {
+        Text(status.displayTitle)
+            .font(.caption2.weight(.semibold))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(backgroundColor)
+            .foregroundStyle(foregroundColor)
+            .clipShape(Capsule())
+    }
+
+    private var backgroundColor: Color {
+        switch status {
+        case .busy, .running: return Color.green.opacity(0.18)
+        case .waiting: return Color.orange.opacity(0.22)
+        case .idle: return Color.gray.opacity(0.18)
+        case .unknown: return Color.gray.opacity(0.12)
+        }
+    }
+
+    private var foregroundColor: Color {
+        switch status {
+        case .busy, .running: return .green
+        case .waiting: return .orange
+        case .idle, .unknown: return .secondary
+        }
+    }
+}
+
+private struct AgentAccessSetupCard: View {
+
+    @ObservedObject var monitor: AgentMonitorEngine
+
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("CONNECT AI TOOL STATE")
+                .font(.mollyCardEyebrow())
+                .foregroundStyle(.tertiary)
+                .tracking(0.6)
+
+            Text("Molly always detects running processes. Grant read access to each tool’s state folder for session names, projects, and sub-agents.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+
+            ForEach(AgentToolKind.allCases) { tool in
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(tool.displayName)
+                            .font(.headline)
+                        Text("~/\(tool.suggestedFolderName)")
+                            .font(.caption.monospaced())
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if monitor.bookmarks.grantedTools.contains(tool) {
+                        Label("Connected", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                            .font(.caption.weight(.semibold))
+                        Button("Revoke") {
+                            monitor.revokeFolderAccess(for: tool)
+                        }
+                    } else {
+                        Button("Grant access…") {
+                            monitor.requestFolderAccess(for: tool)
+                        }
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+
+            Text("Parsing is best-effort — tool formats can change without notice. Nothing leaves this Mac.")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .mollyCard()
+    }
 }
 
 private struct InsightCallout: View {
@@ -1154,6 +1406,10 @@ private struct SettingsPane: View {
 
                         .font(.callout)
 
+                }
+
+                Section("AI tool tracking") {
+                    AgentAccessSetupCard(monitor: surface.agentMonitor)
                 }
 
             }

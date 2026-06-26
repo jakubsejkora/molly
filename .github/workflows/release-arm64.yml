@@ -1,0 +1,80 @@
+name: Release (Apple Silicon)
+
+# Builds an ad-hoc signed arm64 DMG and attaches it to a GitHub Release.
+# Developer ID signing + notarization still happens on a maintainer Mac — see docs/RELEASE.md.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release (e.g. v0.5.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release-arm64:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+
+      - name: Select latest Xcode (project format requires Xcode 16+)
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app /Applications/Xcode.app 2>/dev/null | head -n1)"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Package Molly DMG (Release, arm64, ad-hoc)
+        run: |
+          set -euo pipefail
+          chmod +x Scripts/package-dmg-arm64.sh
+          CODE_SIGN_IDENTITY="-" ./Scripts/package-dmg-arm64.sh
+
+      - name: Compute checksum
+        id: checksum
+        run: |
+          set -euo pipefail
+          DMG="$(ls dist/Molly-*-arm64.dmg)"
+          echo "dmg_path=${DMG}" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(shasum -a 256 "${DMG}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          name: Molly ${{ steps.tag.outputs.name#v }} — Apple Silicon
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+          files: |
+            ${{ steps.checksum.outputs.dmg_path }}
+          body: |
+            Apple Silicon (arm64) build for macOS 14 Sonoma or later.
+
+            **Install:** open the DMG, drag Molly to Applications, then launch.
+
+            **Note:** This CI-built DMG uses ad-hoc signing for smoke-test distribution. macOS may prompt on first open (right-click → Open). For a notarized build, run `Scripts/build-direct-arm64.sh` on a maintainer Mac — see [docs/RELEASE.md](https://github.com/jakubsejkora/molly/blob/main/docs/RELEASE.md).
+
+            **SHA-256:** `${{ steps.checksum.outputs.sha256 }}`
