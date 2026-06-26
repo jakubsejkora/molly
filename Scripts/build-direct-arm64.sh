@@ -7,8 +7,15 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+if [[ "$(uname -s)" != "Darwin" ]]; then
+	echo "This script requires macOS with Xcode. Run it on an Apple Silicon Mac." >&2
+	exit 1
+fi
+
 if ! command -v xcodegen >/dev/null 2>&1; then
-	echo "Install XcodeGen: brew install xcodegen" >&2
+	echo "XcodeGen is required but not installed." >&2
+	echo "Install it, then re-run this script:" >&2
+	echo "  brew install xcodegen" >&2
 	exit 1
 fi
 

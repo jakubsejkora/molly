@@ -6,11 +6,24 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+if [[ "$(uname -s)" != "Darwin" ]]; then
+	echo "This script requires macOS with Xcode. Run it on an Apple Silicon Mac." >&2
+	exit 1
+fi
+
 DIST="${ROOT}/dist"
 mkdir -p "${DIST}"
 
-if [[ -n "${MOLLY_APP:-}" ]] && [[ -d "${MOLLY_APP}" ]]; then
+if [[ -n "${MOLLY_APP:-}" ]]; then
+	if [[ ! -d "${MOLLY_APP}" ]]; then
+		echo "MOLLY_APP is set but the folder does not exist:" >&2
+		echo "  ${MOLLY_APP}" >&2
+		echo "Run ./Scripts/build-direct-arm64.sh first, or point MOLLY_APP at a built Molly.app." >&2
+		exit 1
+	fi
 	APP="${MOLLY_APP}"
+elif [[ -d "${DIST}/export/Molly.app" ]]; then
+	APP="${DIST}/export/Molly.app"
 else
 	echo "→ Locating BUILT_PRODUCTS_DIR…"
 	BUILT_PRODUCTS_DIR="$(
